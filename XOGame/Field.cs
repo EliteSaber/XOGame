@@ -10,42 +10,27 @@ namespace XOGame
     class Field
     {
         public const int Size = 3;
-        private Symbols[,] Matrix = new Symbols[Size, Size];
-        public void GetField()
-        {
-            Console.Write(" | ");
-            for (int i = 0; i < Size; i++)
-                Console.Write($"{i + 1} ");
-            Console.WriteLine();
-            Console.WriteLine(new string('-', (Size + 1) * 2));
-            for (int i = 0; i < Size; i++)
-            {
-                Console.Write($"{i + 1}| ");
-                for (int j = 0; j < Size; j++)
-                {
-                    Console.Write($"{Matrix[i, j]} ");
-                }
-                Console.WriteLine();
-            }
-        }
+        public Symbols[,] GameField { get; private set; } = new Symbols[Size, Size];
         public bool SetSymbol(int line, int column, Symbols symbol)
         {
             bool IsCorrectCoordinates = IsCorrectCoordinate(line) && IsCorrectCoordinate(column);
             if (IsCorrectCoordinates)
-                if (Matrix[line - 1, column - 1] == Symbols.e)
-                    Matrix[line - 1, column - 1] = symbol;
+                if (GameField[line, column] == Symbols.e)
+                    GameField[line, column] = symbol;
                 else
                     IsCorrectCoordinates = false;
             return IsCorrectCoordinates;
         }
-        private bool IsCorrectCoordinate(int coordinate) => coordinate > 0 && coordinate <= Size;
+        private bool IsCorrectCoordinate(int coordinate) => coordinate >= 0 && coordinate < Size;
         public void ClearField()
         {
-            Array.Clear(Matrix, 0, Matrix.Length);
+            for(int i = 0; i < Size; i++)
+                for(int j = 0; j < Size; j++)
+                    GameField[i, j] = Symbols.e;
         }
         public bool IsDraw()
         {
-            foreach(Symbols s in Matrix)
+            foreach(Symbols s in GameField)
                 if (s == Symbols.e)
                     return false;
             return true;
@@ -67,28 +52,28 @@ namespace XOGame
         private bool IsVictoryLine(int line, Symbols symbol)
         {
             for (int j = 0; j < Size; j++)
-                if (Matrix[line, j] != symbol)
+                if (GameField[line, j] != symbol)
                     return false;
             return true;
         }
         private bool IsVictoryCol(int col, Symbols symbol)
         {
             for (int j = 0; j < Size; j++)
-                if (Matrix[j, col] != symbol)
+                if (GameField[j, col] != symbol)
                     return false;
             return true;
         }
         private bool IsVictoryMainDia(Symbols symbol)
         {
             for (int i = 0; i < Size; i++)
-                if (Matrix[i, i] != symbol)
+                if (GameField[i, i] != symbol)
                     return false;
             return true;
         }
         private bool IsVictoryCounterDia(Symbols symbol)
         {
             for (int i = 0; i < Size; i++)
-                if (Matrix[i, Size - 1 - i] != symbol)
+                if (GameField[i, Size - 1 - i] != symbol)
                     return false;
             return true;
         }
