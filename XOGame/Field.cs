@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace XOGame
 {
-    enum Symbols { e, X, O};
+    enum Symbols { Empty, X, O};
     class Field
     {
         public const int Size = 3;
@@ -15,40 +15,40 @@ namespace XOGame
         {
             bool IsCorrectCoordinates = IsCorrectCoordinate(line) && IsCorrectCoordinate(column);
             if (IsCorrectCoordinates)
-                if (GameField[line, column] == Symbols.e)
+                if (GameField[line, column] == Symbols.Empty)
                     GameField[line, column] = symbol;
                 else
                     IsCorrectCoordinates = false;
             return IsCorrectCoordinates;
         }
-        private bool IsCorrectCoordinate(int coordinate) => coordinate >= 0 && coordinate < Size;
         public void ClearField()
         {
-            for(int i = 0; i < Size; i++)
-                for(int j = 0; j < Size; j++)
-                    GameField[i, j] = Symbols.e;
+            for (int i = 0; i < Size; i++)
+                for (int j = 0; j < Size; j++)
+                    GameField[i, j] = Symbols.Empty;
         }
         public bool IsDraw()
         {
-            foreach(Symbols s in GameField)
-                if (s == Symbols.e)
+            foreach (Symbols s in GameField)
+                if (s == Symbols.Empty)
                     return false;
             return true;
         }
         public bool IsVictory(Symbols symbol)
         {
             //главная диагональ
-            if (IsVictoryMainDia(symbol))
+            if (IsVictoryMainDiagonal(symbol))
                 return true;
             //побочная диагональ
-            if (IsVictoryCounterDia(symbol))
+            if (IsVictoryCounterDiagonal(symbol))
                 return true;
             //строка или столбец
-            for(int i = 0; i < Size; i++)
-                if (IsVictoryLine(i, symbol) || IsVictoryCol(i, symbol))
+            for (int i = 0; i < Size; i++)
+                if (IsVictoryLine(i, symbol) || IsVictoryColumn(i, symbol))
                     return true;
             return false;
         }
+        private bool IsCorrectCoordinate(int coordinate) => coordinate >= 0 && coordinate < Size;
         private bool IsVictoryLine(int line, Symbols symbol)
         {
             for (int j = 0; j < Size; j++)
@@ -56,21 +56,21 @@ namespace XOGame
                     return false;
             return true;
         }
-        private bool IsVictoryCol(int col, Symbols symbol)
+        private bool IsVictoryColumn(int col, Symbols symbol)
         {
             for (int j = 0; j < Size; j++)
                 if (GameField[j, col] != symbol)
                     return false;
             return true;
         }
-        private bool IsVictoryMainDia(Symbols symbol)
+        private bool IsVictoryMainDiagonal(Symbols symbol)
         {
             for (int i = 0; i < Size; i++)
                 if (GameField[i, i] != symbol)
                     return false;
             return true;
         }
-        private bool IsVictoryCounterDia(Symbols symbol)
+        private bool IsVictoryCounterDiagonal(Symbols symbol)
         {
             for (int i = 0; i < Size; i++)
                 if (GameField[i, Size - 1 - i] != symbol)

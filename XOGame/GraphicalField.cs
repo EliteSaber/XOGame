@@ -8,47 +8,47 @@ namespace XOGame
 {
     class GraphicalField
     {
-        private string[,] Field;
-        private readonly int Size;
+        private string[,] _field;
+        private readonly int _size;
         public GraphicalField(Symbols[,] field, int size)
         {
-            Size = size;
-            SymbolsToString(field);
+            _size = size;
+            ToString(field);
         }
-        private void SymbolsToString(Symbols[,] field)
+        public void PrintField(int chosenLine, int chosenColumn)
         {
-            Field = new string[Size, Size];
-            for(int i = 0; i < Size; i++)
+            for (int i = 0; i < _size; i++)
             {
-                for(int j = 0; j < Size; j++)
+                for (int j = 0; j < _size; j++)
+                {
+                    if (i == chosenLine && j == chosenColumn)
+                        Console.Write(" > " + _field[i, j]);
+                    else
+                        Console.Write("   " + _field[i, j]);
+                }
+                Console.WriteLine();
+            }
+        }
+        private void ToString(Symbols[,] field)
+        {
+            _field = new string[_size, _size];
+            for(int i = 0; i < _size; i++)
+            {
+                for(int j = 0; j < _size; j++)
                 {
                     switch(field[i,j])
                     {
-                        case Symbols.e:
-                            Field[i, j] = "*";
+                        case Symbols.Empty:
+                            _field[i, j] = "*";
                             break;
                         case Symbols.X:
-                            Field[i, j] = "X";
+                            _field[i, j] = "X";
                             break;
                         case Symbols.O:
-                            Field[i, j] = "O";
+                            _field[i, j] = "O";
                             break;
                     }
                 }
-            }
-        }
-       public void PrintField(int choosenLine, int choosenColumn)
-        {
-            for (int i = 0; i < Size; i++)
-            {
-                for (int j = 0; j < Size; j++)
-                {
-                    if (i == choosenLine && j == choosenColumn)
-                        Console.Write(" > " + Field[i, j]);
-                    else
-                        Console.Write("   " + Field[i, j]);
-                }
-                Console.WriteLine();
             }
         }
     }

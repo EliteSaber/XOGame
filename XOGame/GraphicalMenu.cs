@@ -8,34 +8,30 @@ namespace XOGame
 {
     class GraphicalMenu
     {
-        private const ConsoleKey DownKey = ConsoleKey.DownArrow;
-        private const ConsoleKey UpKey = ConsoleKey.UpArrow;
-        private const ConsoleKey EnterKey = ConsoleKey.Enter;
-        private const ConsoleKey EscKey = ConsoleKey.Escape;
-        private const ConsoleColor DefaultBgColor = ConsoleColor.Black;
-        private const ConsoleColor DefaultFontColor = ConsoleColor.White;
-        private const ConsoleColor ChoosenBgColor = ConsoleColor.White;
-        private const ConsoleColor ChoosenFontColor = ConsoleColor.Black;
-        private string[] Names;
+        private const ConsoleColor _defaultBgColor = ConsoleColor.Black;
+        private const ConsoleColor _defaultFontColor = ConsoleColor.White;
+        private const ConsoleColor _chosenBgColor = ConsoleColor.White;
+        private const ConsoleColor _chosenFontColor = ConsoleColor.Black;
+        private readonly string[] _names;
         public GraphicalMenu(string[] names)
         {
-            Names = names;
+            _names = names;
         }
-        public void PrintMenu(int choosenName)
+        public void PrintMenu(int chosenName)
         {
-            for(int i = 0; i < Names.Length; i++)
+            for(int i = 0; i < _names.Length; i++)
             {
-                if (i == choosenName)
+                if (i == chosenName)
                 {
-                    Console.BackgroundColor = ChoosenBgColor;
-                    Console.ForegroundColor = ChoosenFontColor;
-                    Console.WriteLine(" > " + Names[i]);
-                    Console.BackgroundColor = DefaultBgColor;
-                    Console.ForegroundColor = DefaultFontColor;
+                    Console.BackgroundColor = _chosenBgColor;
+                    Console.ForegroundColor = _chosenFontColor;
+                    Console.WriteLine(" > " + _names[i]);
+                    Console.BackgroundColor = _defaultBgColor;
+                    Console.ForegroundColor = _defaultFontColor;
                 }
                 else
                 {
-                    Console.WriteLine("   " + Names[i]);
+                    Console.WriteLine("   " + _names[i]);
                 }
             }
         }

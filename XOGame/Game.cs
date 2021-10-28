@@ -8,18 +8,18 @@ namespace XOGame
 {
     class Game
     {
-        private static readonly Field GameField = new Field();
-        private const ConsoleKey DownKey = ConsoleKey.DownArrow;
-        private const ConsoleKey UpKey = ConsoleKey.UpArrow;
-        private const ConsoleKey LeftKey = ConsoleKey.LeftArrow;
-        private const ConsoleKey RightKey = ConsoleKey.RightArrow;
-        private const ConsoleKey EnterKey = ConsoleKey.Enter;
-        private const ConsoleKey EscKey = ConsoleKey.Escape;
+        private static readonly Field s_gameField = new Field();
+        private const ConsoleKey _downKey = ConsoleKey.DownArrow;
+        private const ConsoleKey _upKey = ConsoleKey.UpArrow;
+        private const ConsoleKey _leftKey = ConsoleKey.LeftArrow;
+        private const ConsoleKey _rightKey = ConsoleKey.RightArrow;
+        private const ConsoleKey _enterKey = ConsoleKey.Enter;
+        private const ConsoleKey _escKey = ConsoleKey.Escape;
         public static void Start()
         {
             Symbols symbol = ChooseSymbol();
             Player player1 = new Player("Player 1", symbol);
-            if(symbol == Symbols.e)
+            if(symbol == Symbols.Empty)
             {
                 Console.WriteLine("Выход");
                 return;
@@ -33,18 +33,18 @@ namespace XOGame
                 if (gameContinue)
                     gameContinue = !Result(player2);
             }
-            GameField.ClearField();
+            s_gameField.ClearField();
         }
         public static void GetField()
         {
             const int Size = Field.Size;
-            GraphicalField graphicalField = new GraphicalField(GameField.GameField, Size);
+            GraphicalField graphicalField = new GraphicalField(s_gameField.GameField, Size);
             graphicalField.PrintField(-1, -1);
         }
         private static bool Result(Player player)
         {
             Step(player);
-            bool isVictory = GameField.IsVictory(player.Symbol);
+            bool isVictory = s_gameField.IsVictory(player.Symbol);
             if (isVictory)
             {
                 Console.Clear();
@@ -53,7 +53,7 @@ namespace XOGame
             }
             else
             {
-                if(GameField.IsDraw())
+                if(s_gameField.IsDraw())
                 {
                     Console.Clear();
                     GetField();
@@ -66,36 +66,36 @@ namespace XOGame
         private static void Step(Player player)
         {
             const int Size = Field.Size;
-            GraphicalField graphicalField = new GraphicalField(GameField.GameField, Size);
-            int choosenLine = 0,
-                choosenColumn = 0;
+            GraphicalField graphicalField = new GraphicalField(s_gameField.GameField, Size);
+            int chosenLine = 0,
+                chosenColumn = 0;
             bool isEndOfTurn = false;
             while (!isEndOfTurn)
             {
                 Console.Clear();
                 Console.WriteLine($"Ходит {player.Name}");
                 Console.WriteLine("(Enter - принять, Esc - заново)");
-                graphicalField.PrintField(choosenLine, choosenColumn);
+                graphicalField.PrintField(chosenLine, chosenColumn);
                 var key = Console.ReadKey(true).Key;
                 switch (key)
                 {
-                    case DownKey:
-                        choosenLine = CheckOutOfRange(Size, ++choosenLine);
+                    case _downKey:
+                        chosenLine = CheckOutOfRange(Size, ++chosenLine);
                         break;
-                    case UpKey:
-                        choosenLine = CheckOutOfRange(Size, --choosenLine);
+                    case _upKey:
+                        chosenLine = CheckOutOfRange(Size, --chosenLine);
                         break;
-                    case LeftKey:
-                        choosenColumn = CheckOutOfRange(Size, --choosenColumn);
+                    case _leftKey:
+                        chosenColumn = CheckOutOfRange(Size, --chosenColumn);
                         break;
-                    case RightKey:
-                        choosenColumn = CheckOutOfRange(Size, ++choosenColumn);
+                    case _rightKey:
+                        chosenColumn = CheckOutOfRange(Size, ++chosenColumn);
                         break;
-                    case EnterKey:
-                        isEndOfTurn = GameField.SetSymbol(choosenLine, choosenColumn, player.Symbol);
+                    case _enterKey:
+                        isEndOfTurn = s_gameField.SetSymbol(chosenLine, chosenColumn, player.Symbol);
                         break;
-                    case EscKey:
-                        GameField.ClearField();
+                    case _escKey:
+                        s_gameField.ClearField();
                         isEndOfTurn = true;
                         break;
                 }
@@ -105,34 +105,34 @@ namespace XOGame
         {
             string[] arraySymbols = new string[] { "X", "O" };
             GraphicalMenu menu = new GraphicalMenu(arraySymbols);
-            int choosenName = 0;
-            bool IsContinue = true;
-            while (IsContinue)
+            int chosenName = 0;
+            bool isContinue = true;
+            while (isContinue)
             {
                 Console.Clear();
                 Console.WriteLine("Выберите символ:");
                 Console.WriteLine("(Enter - принять, Esc - выйти)");
-                menu.PrintMenu(choosenName);
+                menu.PrintMenu(chosenName);
                 var key = Console.ReadKey(true).Key;
                 switch (key)
                 {
-                    case DownKey:
-                        choosenName = CheckOutOfRange(arraySymbols.Length, ++choosenName);
+                    case _downKey:
+                        chosenName = CheckOutOfRange(arraySymbols.Length, ++chosenName);
                         break;
-                    case UpKey:
-                        choosenName = CheckOutOfRange(arraySymbols.Length, --choosenName);
+                    case _upKey:
+                        chosenName = CheckOutOfRange(arraySymbols.Length, --chosenName);
                         break;
-                    case EnterKey:
-                        choosenName++;
-                        IsContinue = false;
+                    case _enterKey:
+                        chosenName++;
+                        isContinue = false;
                         break;
-                    case EscKey:
-                        choosenName = 0;
-                        IsContinue = false;
+                    case _escKey:
+                        chosenName = 0;
+                        isContinue = false;
                         break;
                 }
             }
-            return (Symbols)choosenName;
+            return (Symbols)chosenName;
         }
         private static int CheckOutOfRange(int length, int index)
         {
